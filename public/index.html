@@ -23,7 +23,6 @@
     <nav class="nav-links" id="navLinks">
       <a href="#hotels">Hotel</a>
       <a href="#rooms">Kamar</a>
-      <a href="#policy">Kebijakan</a>
       <a href="#manage">Cek Booking</a>
       <a href="/login" class="nav-staff">Login Staf</a>
     </nav>
@@ -98,6 +97,18 @@
         <h2>Pilih area menginap</h2>
       </div>
       <p>Klik penginapan untuk melihat pilihan tipe kamar dan harga. Rekomendasi wisata tersedia setelahnya.</p>
+    </div>
+    <div class="hotel-area-filter">
+      <span class="hotel-area-label">Pilih daerah:</span>
+      <div class="chips" id="hotelAreaChips" role="group" aria-label="Filter penginapan berdasarkan daerah">
+        <button type="button" class="chip active" data-area="" aria-pressed="true">Semua daerah</button>
+        <button type="button" class="chip" data-area="Kota Yogyakarta" aria-pressed="false">Kota Yogyakarta</button>
+        <button type="button" class="chip" data-area="Sleman" aria-pressed="false">Sleman</button>
+        <button type="button" class="chip" data-area="Bantul" aria-pressed="false">Bantul</button>
+        <button type="button" class="chip" data-area="Gunungkidul" aria-pressed="false">Gunungkidul</button>
+        <button type="button" class="chip" data-area="Kulon Progo" aria-pressed="false">Kulon Progo</button>
+      </div>
+      <span class="hotel-area-count" id="hotelAreaCount" role="status" aria-live="polite">Memuat penginapan…</span>
     </div>
     <div class="hotel-grid" id="hotelGrid">
       <div class="skeleton hotel-card"></div><div class="skeleton hotel-card"></div><div class="skeleton hotel-card"></div>
@@ -195,16 +206,6 @@
       <p id="wisataRecommendationContext">Rekomendasi pilihan dari layanan Wisata Jogja.</p>
     </div>
     <div class="hotel-grid" id="wisataRecommendationList" aria-live="polite"></div>
-  </div>
-</section>
-
-<!-- ============ INFORMASI LAYANAN ============ -->
-<section class="section" id="policy">
-  <div class="container">
-    <div class="section-head">
-      <div><span class="kicker">Informasi layanan</span><h2>Rencanakan perjalanan lebih mudah</h2></div>
-      <p>Informasi penginapan dihubungkan dengan layanan wisata melalui REST API dan pemetaan wilayah.</p>
-    </div>
   </div>
 </section>
 
