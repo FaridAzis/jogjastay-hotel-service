@@ -1,72 +1,88 @@
-# Instalasi konektor Hotel ↔ Wisata Vercel (19 November 2026)
+# Pengelolaan Deployment dan Integrasi Wisata
 
-## Yang sudah disesuaikan
+**Kondisi terakhir: 19 November 2026**
 
-- `wrangler.jsonc` menggunakan **Worker yang sama**: `jogjastay-hotel-service`.
-- Binding D1 `DB` menggunakan database yang **sudah dibuat**: `jogjastay-db` (ID diambil dari log pemilik akun).
-- `WISATA_API_BASE_URL=https://wisata-jogja-ten.vercel.app`.
-- `WISATA_DESTINATIONS_PATH=/api/v1/destinations`.
-- Source Hotel menyediakan `GET /api/v1/hotels/:id/recommendations` dan pemetaan semantik `Sleman` ↔ `kabupaten-sleman` untuk seluruh 5 wilayah DIY.
-- Foto URL relatif dari Wisata diterjemahkan dengan origin Vercel, tanpa mengopi data ke D1.
+JogjaStay sudah berjalan di Cloudflare Workers. Dokumen ini dipakai ketika ada perubahan kode atau saat mengecek sambungan API Wisata. Ini **bukan** panduan membuat Worker maupun database baru.
 
-## Penting sebelum memulai
+## Alamat yang dipakai
 
-Kode ini dibuat dari revisi semantik Hotel, *bukan* ZIP lama yang belum ada pemetaan istilah.
-Ini bukan aplikasi Wisata milik Andi, melainkan konektor untuk Hotel. Data katalog dan booking D1 **tidak diubah** oleh langkah berikut.
-Tidak ada bukti jaringan langsung karena lingkungan penyusun tidak bisa mengakses URL eksternal; uji di Mac untuk membuktikannya.
-Pastikan menjalankan dari folder paket yang ada `package.json`, `wrangler.jsonc`, dan `src/worker.mjs`.
+- Website dan API Hotel: https://jogjastay-hotel-service.jogjawisata.workers.dev
+- Dokumentasi API Hotel: https://jogjastay-hotel-service.jogjawisata.workers.dev/api/docs
+- API Wisata: https://wisata-jogja-ten.vercel.app
+- Nama Worker: `jogjastay-hotel-service`
+- Binding database: `DB` → `jogjastay-db`
 
-## Prosedur teraman
+Konfigurasi aktif di `wrangler.jsonc`:
 
-1. Sebelum mengubah produksi, uji API Wisata **tanpa deploy**:
+```json
+{
+  "WISATA_API_BASE_URL": "https://wisata-jogja-ten.vercel.app",
+  "WISATA_DESTINATIONS_PATH": "/api/v1/destinations"
+}
+```
 
-   ```bash
-   npm install
-   npm test
-   npm run check:wisata
-   ```
+## Ketika ada perubahan kode Hotel
 
-   Jika pemeriksaan Vercel gagal, **jangan deploy** sebelum tim Wisata memeriksa server/route.
+1. Ambil perubahan repository di laptop terlebih dahulu: `git pull`. Periksa bahwa tidak ada perubahan lokal yang belum disimpan.
+2. Jalankan `npm test` dan `npm run check:interop`. Jika pemeriksaan tidak lulus, cari penyebabnya sebelum deploy.
+3. Jika memang ada kode Worker atau frontend yang perlu diperbarui di website, jalankan `npx wrangler deploy` dari folder proyek yang sama.
+4. Pastikan terminal tetap menunjukkan Worker `jogjastay-hotel-service` dan binding `env.DB` ke `jogjastay-db`.
+5. Uji halaman utama, login staf, dan endpoint relevan setelah deploy.
 
-2. Jika lulus, deploy ulang Worker dengan **nama yang sama** dan database D1 yang sama:
+**Untuk perubahan README atau dokumen GitHub saja, tidak perlu deploy Cloudflare.**
 
-   ```bash
-   npx wrangler whoami
-   npx wrangler deploy
-   ```
+Jangan menjalankan `node tools/deploy.mjs`, `wrangler d1 create`, `db/schema.sql`, atau `db/seed.sql` pada database remote yang sudah dipakai. Jangan menimpa secret admin atau token partner tanpa kebutuhan yang jelas.
 
-   **Jangan menjalankan** `node tools/deploy.mjs`, `wrangler d1 create`, `schema.sql`, atau `seed.sql` lagi. 
-   Jangan menimpa `ADMIN_PASSWORD` atau token partner. Periksa bahwa output binding adalah `env.DB (jogjastay-db)`.
+## Contoh pemeriksaan API tanpa mengubah data
 
-3. Uji API Hotel yang sudah diperbarui:
-
-   ```bash
-   npm run check:interop
-   ```
-
-   Cara manual untuk contoh Sleman:
-
-   - Wisata: `https://wisata-jogja-ten.vercel.app/api/v1/destinations?region=kabupaten-sleman`
-   - Hotel: `https://jogjastay-hotel-service.faridazis0150.workers.dev/api/v1/hotels/H11/recommendations`
-
-4. Buka halaman utama JogjaStay. Pilih hotel di Sleman dan lihat panel rekomendasi wisata. Ulangi dengan wilayah lainnya.
-
-## Setelah Hotel ↔ Wisata berjalan
-
-Untuk **Wisata → Hotel** (arah sebaliknya), Hanif–Andi harus meninjau dan memasang patch dari proyek Wisata pada deployment Vercel mereka, lalu mengisi environment variable berikut di Vercel:
+Wisata, destinasi Sleman:
 
 ```text
-HOTEL_API_URL=https://jogjastay-hotel-service.faridazis0150.workers.dev
+https://wisata-jogja-ten.vercel.app/api/v1/destinations?region=kabupaten-sleman
+```
+
+JogjaStay, rekomendasi untuk hotel di Sleman:
+
+```text
+https://jogjastay-hotel-service.jogjawisata.workers.dev/api/v1/hotels/H11/recommendations
+```
+
+Pemeriksaan kelima wilayah dapat dijalankan melalui:
+
+```bash
+npm run check:interop
+```
+
+Kode Hotel mengubah label wilayah menjadi slug yang dimengerti Wisata, menerima respons destinasi, dan mengembalikan rekomendasi tanpa menyalin database destinasi ke D1.
+
+## Integrasi dari aplikasi Wisata ke Hotel
+
+Bagian **Wisata → Hotel** dikerjakan di backend tim Hanif–Andi. Mereka dapat menggunakan:
+
+```text
+HOTEL_API_URL=https://jogjastay-hotel-service.jogjawisata.workers.dev
 HOTEL_SEARCH_PATH=/api/v1/hotels
 ```
 
-Endpoint yang dipersiapkan pada patch Wisata: `/api/v1/integrations/hotels?region=kabupaten-sleman`.
-Endpoint itu **belum otomatis aktif di Vercel** karena kode mereka harus dideploy oleh tim Wisata.
+Contoh panggilan publik ke Hotel:
 
-## Batas interoperabilitas
+```text
+GET https://jogjastay-hotel-service.jogjawisata.workers.dev/api/v1/hotels?city=Sleman
+```
 
-- Ini melakukan *semantic mapping* menggunakan kosakata JSON dan SKOS/RDF sebagai dokumentasi, **bukan** reasoning OWL.
-- Lokasi dipetakan **per kota/kabupaten**, bukan jarak kilometer atau kedekatan geografis.
-- Harga tiket adalah harga katalog, bukan penawaran final untuk tanggal tertentu.
-- Rekomendasi via API **bukan** otomatis pemesanan silang. Booking langsung di aplikasi asal memerlukan endpoint partner terautentikasi, pengujian tambahan, dan persetujuan tim.
-- Itinerary Yogyakarta tetap hanya aggregator bundling, tidak dilibatkan pada komunikasi Hotel–Wisata.
+Jika aplikasi Wisata menerima `region=kabupaten-sleman`, backend mereka dapat memetakannya ke wilayah `Sleman` sebelum meminta katalog hotel. Katalog publik tidak memerlukan Bearer token partner.
+
+Implementasi tampilan dan rute integrasi di aplikasi Wisata belum otomatis terpasang karena source kedua aplikasi berbeda. Tim Wisata perlu menguji dan men-deploy perubahan di proyek mereka sendiri.
+
+## Hubungan dengan tim Itinerary
+
+Itinerary boleh membaca katalog Hotel dan Wisata untuk menyusun paket. Untuk membuat reservasi hotel melalui backend Itinerary, gunakan token partner Hotel yang sudah dibagikan secara privat. Token tidak boleh ditaruh di kode frontend atau di repository.
+
+Komunikasi **Hotel ↔ Wisata berjalan langsung**. Itinerary bukan perantara request rekomendasi dua arah tersebut.
+
+## Batasan
+
+- Pemetaan wilayah dilakukan pada tingkat kota/kabupaten, bukan perhitungan jarak kilometer.
+- Kamus istilah tersedia di `SEMANTIK_HOTEL_WISATA.md` dan folder `ontology/`.
+- Cek harga/kuota tiket Wisata tidak sama dengan melakukan pembelian tiket. Pemesanan tiket langsung belum diaktifkan.
+- Database D1 dan database milik Wisata dikelola terpisah.
