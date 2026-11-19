@@ -558,6 +558,15 @@ function showSuccess(res, r, name) {
         <div><span>Menginap</span><b>${fmtDate(state.checkIn)} – ${fmtDate(state.checkOut)}</b></div>
         <div class="tot"><span>Perkiraan biaya</span><span>${rupiah(res.totalPrice)}</span></div>
       </div>
+      <section class="booking-wisata-offer" aria-label="Rekomendasi wisata setelah memesan kamar">
+        <span class="kicker">Sekalian jelajahi Yogyakarta?</span>
+        <h3>Tempat wisata di wilayah penginapanmu</h3>
+        <p>Pilihan wisata berikut berada dalam kabupaten/kota yang sama dengan hotel, bukan berdasarkan jarak.</p>
+        <div id="postBookingWisataList" class="booking-wisata-list" aria-live="polite">
+          <p>Memuat pilihan wisata…</p>
+        </div>
+        <button type="button" class="btn btn-light" id="postBookingWisataMore" hidden>Lihat semua rekomendasi wisata</button>
+      </section>
       <div class="btns">
         <button class="btn btn-light" data-close>Tutup</button>
         ${payBtnHtml}
@@ -566,6 +575,41 @@ function showSuccess(res, r, name) {
   $('#copyCode').onclick = () => navigator.clipboard?.writeText(res.bookingId).then(() => toast('Kode booking disalin'));
   $('#copyAccessCode').onclick = () => navigator.clipboard?.writeText(res.accessToken || '').then(() => toast('Kode akses privat disalin'));
   $('#goManage').onclick = () => { closeModal(); lookup(res.bookingId, name, true); };
+  loadPostBookingWisata(r.hotelId);
+}
+
+// Tampilkan tawaran wisata dalam konfirmasi booking tanpa mengganti kode akses tamu.
+// Gagal mengambil API Wisata tidak membatalkan booking hotel yang sudah tercatat.
+async function loadPostBookingWisata(hotelId) {
+  const list = $('#postBookingWisataList');
+  const more = $('#postBookingWisataMore');
+  if (!list || !more) return;
+  try {
+    const result = await api(`/hotels/${encodeURIComponent(hotelId)}/recommendations`);
+    // Respons lambat tidak boleh mengubah modal lain yang mungkin sudah dibuka.
+    if (!list.isConnected || !more.isConnected) return;
+    const destinations = Array.isArray(result.destinations) ? result.destinations.slice(0, 3) : [];
+    if (!destinations.length) {
+      list.innerHTML = '<p>Belum ada rekomendasi wisata untuk wilayah hotel ini.</p>';
+      return;
+    }
+    list.innerHTML = destinations.map((d) => `
+      <article class="booking-wisata-item">
+        ${d.imageUrl ? `<img src="${esc(d.imageUrl)}" alt="" loading="lazy">` : ''}
+        <div>
+          <b>${esc(d.name)}</b>
+          <small>${esc(d.city || 'Yogyakarta')}${d.price == null ? '' : ` · Tiket mulai ${rupiah(d.price)}`}</small>
+        </div>
+      </article>`).join('');
+    more.hidden = false;
+    more.onclick = () => {
+      closeModal();
+      loadWisataRecommendations(hotelId);
+      $('#wisataRecommendations').scrollIntoView({ behavior: 'smooth' });
+    };
+  } catch {
+    if (list.isConnected) list.innerHTML = '<p>Rekomendasi wisata belum dapat dimuat. Pencatatan kamar tetap berhasil.</p>';
+  }
 }
 
 // ---------- Manage booking ----------
