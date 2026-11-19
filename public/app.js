@@ -513,6 +513,24 @@ function openBooking(r) {
             <select name="guests">${Array.from({ length: r.capacity }, (_, i) => i + 1).map((n) =>
               `<option value="${n}" ${n === Math.min(state.guests, r.capacity) ? 'selected' : ''}>${n} orang</option>`).join('')}</select>
           </label>
+          <section class="booking-addon" aria-label="Rencana wisata tambahan">
+            <span class="kicker">Pilihan tambahan</span>
+            <h3>Tambah wisata ke rencana perjalanan</h3>
+            <p>Pilih tempat wisata di wilayah hotel dan cek harga serta kuota tiket. Tiket belum dipesan atau dibayar.</p>
+            <label class="field"><span>Tempat wisata</span>
+              <select id="addonDestination" disabled><option value="">Memuat destinasi wisata…</option></select>
+            </label>
+            <div class="row2">
+              <label class="field"><span>Tanggal kunjungan</span><input type="date" id="addonVisitDate" min="${esc(state.checkIn)}" max="${esc(addDays(state.checkOut, -1))}" value="${esc(state.checkIn)}"></label>
+              <label class="field"><span>Jumlah tiket</span><input type="number" id="addonQty" min="1" max="20" value="${Math.min(state.guests,20)}"></label>
+            </div>
+            <div class="booking-addon-actions">
+              <button type="button" class="btn btn-light" id="addonCheck" disabled>Cek harga &amp; kuota</button>
+              <button type="button" class="btn btn-primary" id="addonApply" hidden>Tambah ke rencana</button>
+            </div>
+            <div id="addonFeedback" class="booking-addon-feedback" role="status" aria-live="polite">Memuat pilihan wisata…</div>
+            <div id="addonCostSummary" class="booking-addon-summary"></div>
+          </section>
           <p class="hint">Pencatatan ini hanya untuk pengujian alur interoperabilitas. Tidak membuat reservasi resmi pada hotel, tidak ada tagihan atau transfer uang.</p>
           <div class="form-error" id="bookErr"></div>
           <button class="btn btn-primary btn-lg btn-block" type="submit" id="bookBtn">Catat rencana menginap</button>
@@ -522,17 +540,115 @@ function openBooking(r) {
 
   const form = $('#bookForm');
 
+  const addonState = { destinations: [], quote: null, chosen: null, request: 0 };
+  const addonSelect = form.querySelector('#addonDestination');
+  const addonDate = form.querySelector('#addonVisitDate');
+  const addonQty = form.querySelector('#addonQty');
+  const addonCheck = form.querySelector('#addonCheck');
+  const addonApply = form.querySelector('#addonApply');
+  const addonFeedback = form.querySelector('#addonFeedback');
+  const addonSummary = form.querySelector('#addonCostSummary');
+  function renderAddonSummary() {
+    const choice = addonState.chosen;
+    addonSummary.innerHTML = choice
+      ? `<div><span>Kamar (${r.nights} malam)</span><b>${rupiah(r.totalPrice)}</b></div>
+         <div><span>Tiket ${esc(choice.name)} (${choice.qty})</span><b>${rupiah(choice.total)}</b></div>
+         <div class='addon-grand-total'><span>Perkiraan gabungan</span><b>${rupiah(r.totalPrice + choice.total)}</b></div>
+         <small>Wisata baru masuk rencana. Tiket belum dipesan/dibayar dan harga dapat berubah.</small>
+         <button type='button' class='btn btn-light btn-sm' id='addonRemove'>Hapus wisata</button>`
+      : `<div><span>Perkiraan biaya kamar</span><b>${rupiah(r.totalPrice)}</b></div>
+         <small>Belum ada wisata ditambahkan ke rencana.</small>`;
+    const remove = addonSummary.querySelector('#addonRemove');
+    if (remove) remove.onclick = () => {
+      addonState.chosen = null;
+      addonState.quote = null;
+      addonApply.hidden = true;
+      renderAddonSummary();
+      addonFeedback.textContent = 'Wisata dihapus dari rencana.';
+    };
+  }
+  function clearAddonQuote() {
+    addonState.request += 1;
+    addonState.quote = null;
+    addonState.chosen = null;
+    addonApply.hidden = true;
+    addonFeedback.textContent = 'Cek harga dan kuota sebelum menambahkan wisata.';
+    renderAddonSummary();
+  }
+  [addonSelect, addonDate, addonQty].forEach((el) => el.addEventListener('input', clearAddonQuote));
+  renderAddonSummary();
+  (async () => {
+    try {
+      const info = await api(`/hotels/${encodeURIComponent(r.hotelId)}/recommendations`);
+      if (!form.isConnected) return;
+      addonState.destinations = (Array.isArray(info.destinations) ? info.destinations : [])
+        .filter((d) => d && /^[1-9]\d{0,8}$/.test(String(d.wisataId)) && d.name);
+      addonSelect.innerHTML = '<option value="">Pilih tempat wisata</option>' +
+        addonState.destinations.map((d) => `<option value='${esc(d.wisataId)}'>${esc(d.name)}</option>`).join('');
+      if (!addonState.destinations.length) {
+        addonFeedback.textContent = 'Belum ada pilihan wisata di wilayah hotel ini. Pemesanan kamar tetap bisa dilanjutkan.';
+        return;
+      }
+      addonSelect.disabled = false;
+      addonCheck.disabled = false;
+      addonFeedback.textContent = 'Pilih destinasi lalu periksa harga dan kuota.';
+    } catch {
+      if (form.isConnected) addonFeedback.textContent = 'Layanan Wisata belum tersedia. Pemesanan kamar tetap bisa dilanjutkan.';
+    }
+  })();
+  addonCheck.addEventListener('click', async () => {
+    const dest = addonState.destinations.find((d) => String(d.wisataId) === addonSelect.value);
+    const date = addonDate.value;
+    const qty = Number(addonQty.value);
+    const request = ++addonState.request;
+    addonState.quote = null;
+    addonState.chosen = null;
+    addonApply.hidden = true;
+    renderAddonSummary();
+    if (!dest || !/^\d{4}-\d{2}-\d{2}$/.test(date) || date < state.checkIn || date >= state.checkOut ||
+        !Number.isSafeInteger(qty) || qty < 1 || qty > 20) {
+      addonFeedback.textContent = 'Pilih wisata, tanggal dalam masa menginap, dan jumlah tiket 1–20.';
+      return;
+    }
+    addonCheck.disabled = true;
+    addonFeedback.textContent = 'Memeriksa harga dan kuota langsung dari Wisata…';
+    try {
+      const params = new URLSearchParams({ date, qty: String(qty) });
+      const quote = await api(`/wisata/destinations/${encodeURIComponent(dest.wisataId)}/availability?${params}`);
+      if (!form.isConnected || request !== addonState.request) return;
+      if (!quote.available || !Number.isFinite(Number(quote.total)) || Number(quote.total) < 0) {
+        addonFeedback.textContent = 'Kuota tiket tidak mencukupi untuk tanggal ini.';
+        return;
+      }
+      addonState.quote = { destinationId: String(dest.wisataId), name: dest.name, visitDate: date, qty, total: Number(quote.total) };
+      addonFeedback.innerHTML = `Tiket tersedia · <b>${rupiah(quote.total)}</b> untuk ${qty} tiket. Belum dipesan.`;
+      addonApply.hidden = false;
+    } catch (err) {
+      if (form.isConnected && request === addonState.request) addonFeedback.textContent = 'Tidak bisa cek tiket: ' + err.message;
+    } finally {
+      if (form.isConnected && request === addonState.request) addonCheck.disabled = false;
+    }
+  });
+  addonApply.addEventListener('click', () => {
+    if (!addonState.quote) return;
+    addonState.chosen = { ...addonState.quote };
+    addonApply.hidden = true;
+    addonFeedback.textContent = 'Wisata ditambahkan ke rencana, tetapi tiket belum dipesan atau dibayar.';
+    renderAddonSummary();
+  });
+
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     const name = form.guestName.value.trim();
     if (!name) { $('#bookErr').textContent = 'Nama tamu wajib diisi.'; form.guestName.focus(); return; }
+    const selectedAddon = addonState.chosen ? { ...addonState.chosen } : null;
     const btn = $('#bookBtn'); btn.disabled = true; btn.textContent = 'Memproses…'; $('#bookErr').textContent = '';
     try {
       const res = await api('/hotel-bookings', { method: 'POST', body: JSON.stringify({
         hotelId: r.hotelId, roomId: r.roomId, guestName: name, guestEmail: form.guestEmail.value, guestPhone: form.guestPhone.value,
         guests: +form.guests.value, checkIn: state.checkIn, checkOut: state.checkOut }) });
       store.add(res.bookingId, name, res.accessToken);
-      showSuccess(res, r, name);
+      showSuccess(res, r, name, selectedAddon);
       loadRooms(); renderRecent();
     } catch (err) {
       $('#bookErr').textContent = err.message;
@@ -542,7 +658,7 @@ function openBooking(r) {
   });
 }
 
-function showSuccess(res, r, name) {
+function showSuccess(res, r, name, selectedAddon = null) {
   const payBtnHtml = `<button class="btn btn-primary" id="goManage">Kelola booking</button>`;
   openModal(`
     <div class="success">
@@ -558,6 +674,13 @@ function showSuccess(res, r, name) {
         <div><span>Menginap</span><b>${fmtDate(state.checkIn)} – ${fmtDate(state.checkOut)}</b></div>
         <div class="tot"><span>Perkiraan biaya</span><span>${rupiah(res.totalPrice)}</span></div>
       </div>
+      ${selectedAddon ? `<div class="booking-added-plan">
+        <b>Rencana wisata (belum dipesan)</b>
+        <p>${esc(selectedAddon.name)} · ${esc(selectedAddon.visitDate)} · ${selectedAddon.qty} tiket</p>
+        <div><span>Perkiraan tiket</span><b>${rupiah(selectedAddon.total)}</b></div>
+        <div><span>Perkiraan kamar + tiket</span><b>${rupiah(Number(res.totalPrice) + selectedAddon.total)}</b></div>
+        <small>Reservasi yang tercatat hanya kamar. Tiket wisata belum dipesan/dibayar dan bukan bagian tagihan.</small>
+      </div>` : ''}
       <section class="booking-wisata-offer" aria-label="Rekomendasi wisata setelah memesan kamar">
         <span class="kicker">Sekalian jelajahi Yogyakarta?</span>
         <h3>Tempat wisata di wilayah penginapanmu</h3>
