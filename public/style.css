@@ -316,6 +316,21 @@ input, select { min-width: 0; max-width: 100%; }
 .code-box b { font-size: 1.7rem; letter-spacing: .04em; color: var(--brand); }
 .success .summary { text-align: left; max-width: 380px; margin: 0 auto 22px; background: var(--tint); }
 .success .btns { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+/* Pilihan wisata tambahan di formulir kamar */
+.booking-addon { margin: 18px 0; padding: 16px; border: 1px solid var(--line); border-radius: 16px; background: var(--tint); }
+.booking-addon h3 { font-family: var(--display); font-size: 1.25rem; margin: 0 0 6px; }
+.booking-addon > p { color: var(--muted); font-size: .86rem; line-height: 1.5; margin: 0 0 12px; }
+.booking-addon .field { margin-bottom: 10px; }
+.booking-addon select, .booking-addon input { width: 100%; box-sizing: border-box; }
+.booking-addon-actions { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
+.booking-addon-feedback { color: var(--ink-2); font-size: .85rem; line-height: 1.5; min-height: 20px; }
+.booking-addon-summary { display: grid; gap: 8px; margin-top: 12px; padding: 14px; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; }
+.booking-addon-summary > div, .booking-added-plan > div { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+.booking-addon-summary small, .booking-added-plan small { color: var(--muted); font-size: .77rem; line-height: 1.5; }
+.booking-addon-summary .addon-grand-total { border-top: 1px dashed var(--line); padding-top: 10px; font-weight: 700; }
+.booking-added-plan { display: grid; gap: 8px; max-width: 390px; padding: 16px; margin: 12px auto 20px; border-radius: 14px; background: var(--brand-soft); text-align: left; }
+.booking-added-plan p { margin: 0; font-size: .85rem; }
+
 /* Rekomendasi wisata opsional di konfirmasi setelah reservasi */
 .booking-wisata-offer { margin: 20px auto 24px; padding: 18px; max-width: 390px; text-align: left; border: 1px solid var(--line); background: var(--tint); border-radius: 16px; }
 .booking-wisata-offer .kicker { margin-bottom: 5px; }
