@@ -97,23 +97,11 @@
         <span class="kicker">Lokasi</span>
         <h2>Pilih area menginap</h2>
       </div>
-      <p>Klik hotel untuk melihat kamar dan rekomendasi destinasi wisata di wilayah yang sama.</p>
+      <p>Klik penginapan untuk melihat pilihan tipe kamar dan harga. Rekomendasi wisata tersedia setelahnya.</p>
     </div>
     <div class="hotel-grid" id="hotelGrid">
       <div class="skeleton hotel-card"></div><div class="skeleton hotel-card"></div><div class="skeleton hotel-card"></div>
     </div>
-  </div>
-</section>
-
-<!-- ============ REKOMENDASI WISATA: hasil API antar-backend, bukan daftar statis -->
-<section class="section" id="wisataRecommendations" hidden>
-  <div class="container">
-    <div class="section-head">
-      <div><span class="kicker">Jelajahi Yogyakarta</span>
-      <h2>Wisata di wilayah hotel pilihan</h2></div>
-      <p id="wisataRecommendationContext">Rekomendasi pilihan dari layanan Wisata Jogja.</p>
-    </div>
-    <div class="hotel-grid" id="wisataRecommendationList" aria-live="polite"></div>
   </div>
 </section>
 
@@ -195,6 +183,18 @@
     <div class="room-grid" id="roomGrid">
       <div class="skeleton room-card"></div><div class="skeleton room-card"></div><div class="skeleton room-card"></div>
     </div>
+  </div>
+</section>
+
+<!-- ============ REKOMENDASI WISATA: hasil API antar-backend, bukan daftar statis -->
+<section class="section" id="wisataRecommendations" hidden>
+  <div class="container">
+    <div class="section-head">
+      <div><span class="kicker">Jelajahi Yogyakarta</span>
+      <h2>Wisata di wilayah hotel pilihan</h2></div>
+      <p id="wisataRecommendationContext">Rekomendasi pilihan dari layanan Wisata Jogja.</p>
+    </div>
+    <div class="hotel-grid" id="wisataRecommendationList" aria-live="polite"></div>
   </div>
 </section>
 
