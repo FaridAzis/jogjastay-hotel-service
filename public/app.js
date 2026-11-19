@@ -288,7 +288,7 @@ async function loadWisataRecommendations(hotelId) {
 }
 function setHotel(id) {
   state.hotel = id; $('#hotelFilter').value = id;
-  $('#hotelGrid .hotel-card').forEach((c) => {
+  $$('#hotelGrid .hotel-card').forEach((c) => {
     const selected = !!id && c.dataset.hotel === id;
     c.classList.toggle('active', selected);
     c.setAttribute('aria-pressed', String(selected));
@@ -304,7 +304,7 @@ function setAreaFilter(area) {
   state.hotel = '';
   $('#showWisataBtn').hidden = true;
   loadWisataRecommendations('');
-  $('#hotelAreaChips [data-area], #areaChips [data-area]').forEach((chip) => {
+  $$('#hotelAreaChips [data-area], #areaChips [data-area]').forEach((chip) => {
     const selected = chip.dataset.area === area;
     chip.classList.toggle('active', selected);
     chip.setAttribute('aria-pressed', String(selected));
@@ -367,7 +367,7 @@ $('#priceMax').addEventListener('change', onPriceInput);
 $('#filterReset').addEventListener('click', () => {
   state.area = ''; state.priceMin = 0; state.priceMax = 0; state.hotel = ''; state.type = '';
   loadWisataRecommendations(''); $('#showWisataBtn').hidden = true;
-  $('#areaChips .chip, #hotelAreaChips .chip').forEach((c) => {
+  $$('#areaChips .chip, #hotelAreaChips .chip').forEach((c) => {
     const selected = c.dataset.area === '';
     c.classList.toggle('active', selected);
     c.setAttribute('aria-pressed', String(selected));
