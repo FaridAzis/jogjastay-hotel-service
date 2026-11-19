@@ -82,8 +82,14 @@ $$('#navLinks a').forEach((a) => a.addEventListener('click', () => $('#navLinks'
 async function loadHotels() {
   state.hotels = await api('/hotels');
   buildAreaMap();
-  $('#hotelGrid').innerHTML = state.hotels.map((h) => `
-    <button class="hotel-card" data-hotel="${esc(h.hotelId)}">
+  renderHotels();
+}
+
+function renderHotels() {
+  const hotels = state.hotels.filter((h) => !state.area || h.city === state.area);
+  $('#hotelAreaCount').textContent = `${hotels.length} penginapan ditemukan`;
+  $('#hotelGrid').innerHTML = hotels.map((h) => `
+    <button class="hotel-card${h.hotelId === state.hotel ? ' active' : ''}" data-hotel="${esc(h.hotelId)}" aria-pressed="${h.hotelId === state.hotel}">
       <img src="${esc(h.imageUrl || PLACEHOLDER)}" alt="${esc(h.name)}" loading="lazy">
       <div class="hc-body">
         <span class="hc-area">${esc(h.area)}</span>
@@ -91,9 +97,10 @@ async function loadHotels() {
         <div class="stars">${'★'.repeat(h.rating)}<span style="opacity:.35">${'★'.repeat(5 - h.rating)}</span></div>
         <p>${esc(h.description)}</p>
       </div>
-    </button>`).join('');
+    </button>`).join('') || '<p>Belum ada penginapan di daerah ini.</p>';
   $('#hotelFilter').innerHTML = '<option value="">Semua hotel</option>' +
-    state.hotels.map((h) => `<option value="${esc(h.hotelId)}">${esc(h.name)}</option>`).join('');
+    hotels.map((h) => `<option value="${esc(h.hotelId)}">${esc(h.name)}</option>`).join('');
+  $('#hotelFilter').value = state.hotel;
 }
 
 $('#hotelGrid').addEventListener('click', (e) => {
@@ -102,6 +109,10 @@ $('#hotelGrid').addEventListener('click', (e) => {
   $('#rooms').scrollIntoView({ behavior: 'smooth' });
 });
 $('#hotelFilter').addEventListener('change', (e) => setHotel(e.target.value));
+$('#hotelAreaChips').addEventListener('click', (e) => {
+  const chip = e.target.closest('[data-area]');
+  if (chip) setAreaFilter(chip.dataset.area);
+});
 $('#showWisataBtn').addEventListener('click', () => $('#wisataRecommendations').scrollIntoView({ behavior: 'smooth' }));
 let wisataRequestId = 0;
 let wisataDestinations = [];
@@ -277,10 +288,29 @@ async function loadWisataRecommendations(hotelId) {
 }
 function setHotel(id) {
   state.hotel = id; $('#hotelFilter').value = id;
-  $$('.hotel-card').forEach((c) => c.classList.toggle('active', c.dataset.hotel === id));
+  $('#hotelGrid .hotel-card').forEach((c) => {
+    const selected = !!id && c.dataset.hotel === id;
+    c.classList.toggle('active', selected);
+    c.setAttribute('aria-pressed', String(selected));
+  });
   renderRooms();
   $('#showWisataBtn').hidden = !id;
   loadWisataRecommendations(id);
+}
+
+function setAreaFilter(area) {
+  if (!['', 'Kota Yogyakarta', 'Sleman', 'Bantul', 'Gunungkidul', 'Kulon Progo'].includes(area)) return;
+  state.area = area;
+  state.hotel = '';
+  $('#showWisataBtn').hidden = true;
+  loadWisataRecommendations('');
+  $('#hotelAreaChips [data-area], #areaChips [data-area]').forEach((chip) => {
+    const selected = chip.dataset.area === area;
+    chip.classList.toggle('active', selected);
+    chip.setAttribute('aria-pressed', String(selected));
+  });
+  renderHotels();
+  renderRooms();
 }
 $('#typeChips').addEventListener('click', (e) => {
   const chip = e.target.closest('.chip'); if (!chip) return;
@@ -300,12 +330,8 @@ $('#filterToggle').addEventListener('click', () => {
 
 // ---- Area chips ----
 $('#areaChips').addEventListener('click', (e) => {
-  const chip = e.target.closest('.chip'); if (!chip) return;
-  state.area = chip.dataset.area;
-  $$('#areaChips .chip').forEach((c) => c.classList.toggle('active', c === chip));
-  // When area selected, reset hotel filter to avoid conflict
-  if (state.area) { state.hotel = ''; $('#hotelFilter').value = ''; $$('.hotel-card').forEach((c) => c.classList.remove('active')); loadWisataRecommendations(''); $('#showWisataBtn').hidden = true; }
-  renderRooms();
+  const chip = e.target.closest('[data-area]');
+  if (chip) setAreaFilter(chip.dataset.area);
 });
 
 // ---- Price presets ----
@@ -341,12 +367,17 @@ $('#priceMax').addEventListener('change', onPriceInput);
 $('#filterReset').addEventListener('click', () => {
   state.area = ''; state.priceMin = 0; state.priceMax = 0; state.hotel = ''; state.type = '';
   loadWisataRecommendations(''); $('#showWisataBtn').hidden = true;
-  $$('#areaChips .chip').forEach((c) => c.classList.toggle('active', c.dataset.area === ''));
+  $('#areaChips .chip, #hotelAreaChips .chip').forEach((c) => {
+    const selected = c.dataset.area === '';
+    c.classList.toggle('active', selected);
+    c.setAttribute('aria-pressed', String(selected));
+  });
   $$('#typeChips .chip').forEach((c) => c.classList.toggle('active', c.dataset.type === ''));
   $$('.chip-sm').forEach((c) => c.classList.remove('active'));
   $$('.hotel-card').forEach((c) => c.classList.remove('active'));
   $('#hotelFilter').value = '';
   $('#priceMin').value = ''; $('#priceMax').value = '';
+  renderHotels();
   renderRooms();
 });
 
