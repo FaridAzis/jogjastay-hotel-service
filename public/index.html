@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>JogjaStay · Hotel di Yogyakarta</title>
+  <meta name="description" content="Jelajahi informasi penginapan dan jenis kamar di lima wilayah Daerah Istimewa Yogyakarta.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="img/logo.svg" type="image/svg+xml">
+</head>
+<body>
+
+<!-- ============ NAV ============ -->
+<header class="nav" id="nav">
+  <div class="container nav-inner">
+    <a href="#top" class="brand">
+      <img src="img/logo.svg" alt="" width="36" height="36">
+      <span>JogjaStay</span>
+    </a>
+    <nav class="nav-links" id="navLinks">
+      <a href="#hotels">Hotel</a>
+      <a href="#rooms">Kamar</a>
+      <a href="#policy">Kebijakan</a>
+      <a href="#manage">Cek Booking</a>
+      <a href="/login" class="nav-staff">Login Staf</a>
+    </nav>
+    <a href="#rooms" class="btn btn-primary nav-cta">Lihat Kamar</a>
+    <button class="nav-toggle" id="navToggle" aria-label="Menu">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+  </div>
+</header>
+
+<main id="top">
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="container hero-grid">
+    <div class="hero-copy">
+      <span class="eyebrow"><span class="dot"></span>Katalog 50 penginapan di 5 wilayah DIY</span>
+      <h1>Jelajahi penginapan di <em>Yogyakarta.</em></h1>
+      <p class="lead">Dari Malioboro dan Kaliurang hingga Parangtritis dan Gunungkidul. Temukan informasi lokasi, jenis kamar, dan kisaran harga dalam satu katalog.</p>
+
+      <p class="hint" style="margin-bottom:1rem">Informasi dalam katalog ini disediakan untuk pengujian integrasi, bukan penawaran resmi pihak hotel.</p>
+      <form class="search" id="searchForm">
+        <label class="field">
+          <span>Check-in</span>
+          <input type="date" id="checkIn" required>
+        </label>
+        <label class="field">
+          <span>Check-out</span>
+          <input type="date" id="checkOut" required>
+        </label>
+        <label class="field field-sm">
+          <span>Tamu</span>
+          <select id="guestCount">
+            <option value="1">1 orang</option><option value="2" selected>2 orang</option>
+            <option value="3">3 orang</option><option value="4">4 orang</option>
+          </select>
+        </label>
+        <button class="btn btn-primary btn-lg" type="submit">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          Cari Kamar
+        </button>
+      </form>
+
+      <ul class="trust">
+        <li><svg viewBox="0 0 24 24"><path d="m5 12 5 5L20 7"/></svg>Pencarian lintas wilayah</li>
+        <li><svg viewBox="0 0 24 24"><path d="m5 12 5 5L20 7"/></svg>Pilihan tipe kamar</li>
+        <li><svg viewBox="0 0 24 24"><path d="m5 12 5 5L20 7"/></svg>Informasi terpusat</li>
+      </ul>
+    </div>
+
+    <div class="hero-visual" aria-hidden="true">
+      <div class="hero-photo main"><img src="https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=1000&q=80&fit=crop&crop=center" alt="" onerror="this.onerror=null;this.src='img/room-placeholder.svg'"></div>
+      <div class="hero-photo small"><img src="https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=600&q=80&fit=crop&crop=center" alt="" onerror="this.onerror=null;this.src='img/room-placeholder.svg'"></div>
+      <div class="float-card fc-1">
+        <span class="fc-icon"><svg viewBox="0 0 24 24"><path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6l-8-3Z"/></svg></span>
+        <div><b>Bebas batal</b><small>Refund otomatis</small></div>
+      </div>
+      <div class="float-card fc-2">
+        <span class="fc-icon gold"><svg viewBox="0 0 24 24" style="fill:none"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M7 10h4M7 14h7"/></svg></span>
+        <div><b>Kode instan</b><small>Langsung setelah pesan</small></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ HOTELS ============ -->
+<section class="section" id="hotels">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <span class="kicker">Lokasi</span>
+        <h2>Pilih area menginap</h2>
+      </div>
+      <p>Klik hotel untuk melihat kamar dan rekomendasi destinasi wisata di wilayah yang sama.</p>
+    </div>
+    <div class="hotel-grid" id="hotelGrid">
+      <div class="skeleton hotel-card"></div><div class="skeleton hotel-card"></div><div class="skeleton hotel-card"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ REKOMENDASI WISATA: hasil API antar-backend, bukan daftar statis -->
+<section class="section" id="wisataRecommendations" hidden>
+  <div class="container">
+    <div class="section-head">
+      <div><span class="kicker">Jelajahi Yogyakarta</span>
+      <h2>Wisata di wilayah hotel pilihan</h2></div>
+      <p id="wisataRecommendationContext">Rekomendasi pilihan dari layanan Wisata Jogja.</p>
+    </div>
+    <div class="hotel-grid" id="wisataRecommendationList" aria-live="polite"></div>
+  </div>
+</section>
+
+<!-- ============ ROOMS ============ -->
+<section class="section section-tint" id="rooms">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <span class="kicker">Kamar</span>
+        <h2>Kamar tersedia</h2>
+      </div>
+      <div><p id="stayInfo">Pilih tanggal untuk melihat ketersediaan.</p>
+        <button type="button" class="btn btn-light" id="showWisataBtn" hidden>Lihat rekomendasi wisata</button></div>
+    </div>
+
+    <div class="filters">
+      <div class="filter-row">
+        <div class="chips" id="typeChips" role="tablist">
+          <button class="chip active" data-type="">Semua tipe</button>
+          <button class="chip" data-type="Standard">Standard</button>
+          <button class="chip" data-type="Deluxe">Deluxe</button>
+          <button class="chip" data-type="Suite">Suite</button>
+          <button class="chip" data-type="Villa">Villa</button>
+          <button class="chip" data-type="Family">Family</button>
+        </div>
+        <button class="btn-filter-toggle" id="filterToggle" aria-expanded="false">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="10" y1="18" x2="14" y2="18"/></svg>
+          Filter <span class="filter-badge" id="filterBadge" hidden>0</span>
+        </button>
+      </div>
+
+      <div class="filter-panel" id="filterPanel" hidden>
+        <div class="filter-panel-inner">
+          <div class="filter-group">
+            <label class="filter-label">Area / Kota</label>
+            <div class="chips" id="areaChips">
+              <button class="chip active" data-area="">Semua area</button>
+              <button class="chip" data-area="Kota Yogyakarta">Kota Yogyakarta</button>
+              <button class="chip" data-area="Sleman">Sleman</button>
+              <button class="chip" data-area="Bantul">Bantul</button>
+              <button class="chip" data-area="Gunungkidul">Gunungkidul</button>
+              <button class="chip" data-area="Kulon Progo">Kulon Progo</button>
+            </div>
+          </div>
+          <div class="filter-group">
+            <label class="filter-label">Hotel</label>
+            <select id="hotelFilter" class="select"><option value="">Semua hotel</option></select>
+          </div>
+          <div class="filter-group">
+            <label class="filter-label">Harga per malam</label>
+            <div class="price-range">
+              <div class="price-inputs">
+                <div class="price-input-wrap">
+                  <span class="price-prefix">Rp</span>
+                  <input type="number" id="priceMin" class="price-input" placeholder="Min" min="0" step="50000">
+                </div>
+                <span class="price-sep">–</span>
+                <div class="price-input-wrap">
+                  <span class="price-prefix">Rp</span>
+                  <input type="number" id="priceMax" class="price-input" placeholder="Max" min="0" step="50000">
+                </div>
+              </div>
+              <div class="price-presets">
+                <button class="chip-sm" data-min="0" data-max="300000">&lt; 300rb</button>
+                <button class="chip-sm" data-min="300000" data-max="700000">300–700rb</button>
+                <button class="chip-sm" data-min="700000" data-max="1500000">700rb–1,5jt</button>
+                <button class="chip-sm" data-min="1500000" data-max="">1,5jt+</button>
+              </div>
+            </div>
+          </div>
+          <div class="filter-actions">
+            <button class="btn btn-light btn-sm" id="filterReset">Reset filter</button>
+            <span id="filterCount" class="filter-count-text">Memuat…</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="room-grid" id="roomGrid">
+      <div class="skeleton room-card"></div><div class="skeleton room-card"></div><div class="skeleton room-card"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ INFORMASI LAYANAN ============ -->
+<section class="section" id="policy">
+  <div class="container">
+    <div class="section-head">
+      <div><span class="kicker">Informasi layanan</span><h2>Rencanakan perjalanan lebih mudah</h2></div>
+      <p>Informasi penginapan dihubungkan dengan layanan wisata melalui REST API dan pemetaan wilayah.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MANAGE BOOKING ============ -->
+<section class="section section-tint" id="manage">
+  <div class="container manage-wrap">
+    <div class="manage-card">
+      <div class="manage-head">
+        <h2>Cek &amp; kelola booking</h2>
+        <p>Masukkan kode dan akses privat untuk melihat atau membatalkan pencatatan reservasi.</p>
+      </div>
+      <form class="manage-form" id="lookupForm">
+        <label class="field">
+          <span>Kode booking</span>
+          <input id="lookupId" placeholder="HB-1001" required autocomplete="off">
+        </label>
+        <label class="field">
+          <span>Nama tamu</span>
+          <input id="lookupName" placeholder="Budi Santoso" required>
+        </label>
+        <label class="field">
+          <span>Kode akses privat (dikirim saat booking)</span>
+          <input id="lookupToken" placeholder="Tempel kode akses booking" autocomplete="off">
+        </label>
+        <button class="btn btn-primary btn-lg" type="submit">Cek Status</button>
+      </form>
+      <div id="recentBookings" class="recent"></div>
+      <div id="lookupResult"></div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="footer">
+  <div class="container footer-inner">
+    <div class="brand"><img src="img/logo.svg" alt="" width="30" height="30"><span>JogjaStay</span></div>
+    <p><a href="/login">Login staf</a> · <a href="/api/docs">Dokumentasi API</a> · Cloudflare Workers + D1</p>
+  </div>
+</footer>
+
+<!-- ============ MODAL ============ -->
+<div class="modal" id="modal" hidden>
+  <div class="modal-backdrop" data-close></div>
+  <div class="modal-panel" role="dialog" aria-modal="true" id="modalPanel"></div>
+</div>
+
+<div class="toast" id="toast" hidden></div>
+
+<script src="app.js"></script>
+</body>
+</html>

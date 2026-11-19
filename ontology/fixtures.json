@@ -1,0 +1,284 @@
+{
+  "regions": [
+    {
+      "input": "Kota Yogyakarta",
+      "hotelLabel": "Kota Yogyakarta",
+      "wisataSlug": "kota-yogyakarta",
+      "conceptId": "diy:kota-yogyakarta"
+    },
+    {
+      "input": "kota-yogyakarta",
+      "hotelLabel": "Kota Yogyakarta",
+      "wisataSlug": "kota-yogyakarta",
+      "conceptId": "diy:kota-yogyakarta"
+    },
+    {
+      "input": "kota jogja",
+      "hotelLabel": "Kota Yogyakarta",
+      "wisataSlug": "kota-yogyakarta",
+      "conceptId": "diy:kota-yogyakarta"
+    },
+    {
+      "input": "kota yogya",
+      "hotelLabel": "Kota Yogyakarta",
+      "wisataSlug": "kota-yogyakarta",
+      "conceptId": "diy:kota-yogyakarta"
+    },
+    {
+      "input": "yogyakarta city",
+      "hotelLabel": "Kota Yogyakarta",
+      "wisataSlug": "kota-yogyakarta",
+      "conceptId": "diy:kota-yogyakarta"
+    },
+    {
+      "input": "kota yogyakarta",
+      "hotelLabel": "Kota Yogyakarta",
+      "wisataSlug": "kota-yogyakarta",
+      "conceptId": "diy:kota-yogyakarta"
+    },
+    {
+      "input": "Sleman",
+      "hotelLabel": "Sleman",
+      "wisataSlug": "kabupaten-sleman",
+      "conceptId": "diy:kabupaten-sleman"
+    },
+    {
+      "input": "kabupaten-sleman",
+      "hotelLabel": "Sleman",
+      "wisataSlug": "kabupaten-sleman",
+      "conceptId": "diy:kabupaten-sleman"
+    },
+    {
+      "input": "kabupaten sleman",
+      "hotelLabel": "Sleman",
+      "wisataSlug": "kabupaten-sleman",
+      "conceptId": "diy:kabupaten-sleman"
+    },
+    {
+      "input": "kab sleman",
+      "hotelLabel": "Sleman",
+      "wisataSlug": "kabupaten-sleman",
+      "conceptId": "diy:kabupaten-sleman"
+    },
+    {
+      "input": "kab. sleman",
+      "hotelLabel": "Sleman",
+      "wisataSlug": "kabupaten-sleman",
+      "conceptId": "diy:kabupaten-sleman"
+    },
+    {
+      "input": "sleman",
+      "hotelLabel": "Sleman",
+      "wisataSlug": "kabupaten-sleman",
+      "conceptId": "diy:kabupaten-sleman"
+    },
+    {
+      "input": "Bantul",
+      "hotelLabel": "Bantul",
+      "wisataSlug": "kabupaten-bantul",
+      "conceptId": "diy:kabupaten-bantul"
+    },
+    {
+      "input": "kabupaten-bantul",
+      "hotelLabel": "Bantul",
+      "wisataSlug": "kabupaten-bantul",
+      "conceptId": "diy:kabupaten-bantul"
+    },
+    {
+      "input": "kabupaten bantul",
+      "hotelLabel": "Bantul",
+      "wisataSlug": "kabupaten-bantul",
+      "conceptId": "diy:kabupaten-bantul"
+    },
+    {
+      "input": "kab bantul",
+      "hotelLabel": "Bantul",
+      "wisataSlug": "kabupaten-bantul",
+      "conceptId": "diy:kabupaten-bantul"
+    },
+    {
+      "input": "kab. bantul",
+      "hotelLabel": "Bantul",
+      "wisataSlug": "kabupaten-bantul",
+      "conceptId": "diy:kabupaten-bantul"
+    },
+    {
+      "input": "bantul",
+      "hotelLabel": "Bantul",
+      "wisataSlug": "kabupaten-bantul",
+      "conceptId": "diy:kabupaten-bantul"
+    },
+    {
+      "input": "Gunungkidul",
+      "hotelLabel": "Gunungkidul",
+      "wisataSlug": "kabupaten-gunungkidul",
+      "conceptId": "diy:kabupaten-gunungkidul"
+    },
+    {
+      "input": "kabupaten-gunungkidul",
+      "hotelLabel": "Gunungkidul",
+      "wisataSlug": "kabupaten-gunungkidul",
+      "conceptId": "diy:kabupaten-gunungkidul"
+    },
+    {
+      "input": "kabupaten gunung kidul",
+      "hotelLabel": "Gunungkidul",
+      "wisataSlug": "kabupaten-gunungkidul",
+      "conceptId": "diy:kabupaten-gunungkidul"
+    },
+    {
+      "input": "kabupaten gunungkidul",
+      "hotelLabel": "Gunungkidul",
+      "wisataSlug": "kabupaten-gunungkidul",
+      "conceptId": "diy:kabupaten-gunungkidul"
+    },
+    {
+      "input": "gunung kidul",
+      "hotelLabel": "Gunungkidul",
+      "wisataSlug": "kabupaten-gunungkidul",
+      "conceptId": "diy:kabupaten-gunungkidul"
+    },
+    {
+      "input": "gunungkidul",
+      "hotelLabel": "Gunungkidul",
+      "wisataSlug": "kabupaten-gunungkidul",
+      "conceptId": "diy:kabupaten-gunungkidul"
+    },
+    {
+      "input": "kab. gunung kidul",
+      "hotelLabel": "Gunungkidul",
+      "wisataSlug": "kabupaten-gunungkidul",
+      "conceptId": "diy:kabupaten-gunungkidul"
+    },
+    {
+      "input": "Kulon Progo",
+      "hotelLabel": "Kulon Progo",
+      "wisataSlug": "kabupaten-kulon-progo",
+      "conceptId": "diy:kabupaten-kulon-progo"
+    },
+    {
+      "input": "kabupaten-kulon-progo",
+      "hotelLabel": "Kulon Progo",
+      "wisataSlug": "kabupaten-kulon-progo",
+      "conceptId": "diy:kabupaten-kulon-progo"
+    },
+    {
+      "input": "kabupaten kulon progo",
+      "hotelLabel": "Kulon Progo",
+      "wisataSlug": "kabupaten-kulon-progo",
+      "conceptId": "diy:kabupaten-kulon-progo"
+    },
+    {
+      "input": "kabupaten kulonprogo",
+      "hotelLabel": "Kulon Progo",
+      "wisataSlug": "kabupaten-kulon-progo",
+      "conceptId": "diy:kabupaten-kulon-progo"
+    },
+    {
+      "input": "kulonprogo",
+      "hotelLabel": "Kulon Progo",
+      "wisataSlug": "kabupaten-kulon-progo",
+      "conceptId": "diy:kabupaten-kulon-progo"
+    },
+    {
+      "input": "kulon progo",
+      "hotelLabel": "Kulon Progo",
+      "wisataSlug": "kabupaten-kulon-progo",
+      "conceptId": "diy:kabupaten-kulon-progo"
+    },
+    {
+      "input": "kab. kulon progo",
+      "hotelLabel": "Kulon Progo",
+      "wisataSlug": "kabupaten-kulon-progo",
+      "conceptId": "diy:kabupaten-kulon-progo"
+    }
+  ],
+  "reject": [
+    "Bandung",
+    "kabupaten-bogor",
+    "Jogja",
+    "DIY",
+    "Daerah Istimewa Yogyakarta",
+    ""
+  ],
+  "bookings": [
+    {
+      "provider": "hotel",
+      "input": {
+        "bookingId": "HB-ABC",
+        "status": "confirmed",
+        "payment": {
+          "status": "unpaid"
+        }
+      },
+      "expected": {
+        "provider": "hotel",
+        "reference": "HB-ABC",
+        "reservationState": "reserved",
+        "paymentState": "unpaid"
+      }
+    },
+    {
+      "provider": "hotel",
+      "input": {
+        "bookingId": "HB-XYZ",
+        "status": "cancelled",
+        "payment": {
+          "status": "partially_refunded"
+        }
+      },
+      "expected": {
+        "provider": "hotel",
+        "reference": "HB-XYZ",
+        "reservationState": "cancelled",
+        "paymentState": "partially_refunded"
+      }
+    },
+    {
+      "provider": "wisata",
+      "input": {
+        "code": "WJ-ABC",
+        "status": "PAID"
+      },
+      "expected": {
+        "provider": "wisata",
+        "reference": "WJ-ABC",
+        "reservationState": "reserved",
+        "paymentState": "paid"
+      }
+    },
+    {
+      "provider": "wisata",
+      "input": {
+        "code": "WJ-ZZZ",
+        "status": "REFUNDED"
+      },
+      "expected": {
+        "provider": "wisata",
+        "reference": "WJ-ZZZ",
+        "reservationState": "refunded",
+        "paymentState": "refunded"
+      }
+    }
+  ],
+  "resources": [
+    {
+      "hotel": {
+        "hotelId": "H05",
+        "name": "Hotel Uji",
+        "city": "Sleman",
+        "address": "Jl. Contoh"
+      },
+      "wisata": {
+        "id": 17,
+        "name": "Wisata Uji",
+        "region": "kabupaten-sleman",
+        "photos": [
+          "/static/img/17-1.jpg"
+        ],
+        "price": 12000
+      },
+      "conceptId": "diy:kabupaten-sleman"
+    }
+  ]
+}

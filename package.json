@@ -1,0 +1,21 @@
+{
+  "name": "jogjastay-cloudflare",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "description": "JogjaStay DIY — Cloudflare Workers + D1, adaptasi Hotel Service Ai",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "test": "node --test test/*.test.mjs",
+    "check": "node --check src/worker.mjs && node --check src/logic.mjs && node --test test/*.test.mjs",
+    "check:wisata": "node tools/check-wisata-live.mjs",
+    "check:interop": "node tools/check-wisata-live.mjs --hotel"
+  },
+  "devDependencies": {
+    "wrangler": "^4.50.0"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

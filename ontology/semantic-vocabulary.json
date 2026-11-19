@@ -1,0 +1,339 @@
+{
+  "title": "Kamus Semantik Interoperabilitas Hotel–Wisata DIY v1",
+  "version": "1.0.0",
+  "notes": "Kesetaraan konsep dikurasi; bukan ontology OWL dengan reasoning otomatis. Tabel padanan bernuansa SKOS exactMatch untuk identitas wilayah dan relatedMatch untuk konsep berbeda namun terkait.",
+  "regions": [
+    {
+      "conceptId": "diy:kota-yogyakarta",
+      "hotelLabel": "Kota Yogyakarta",
+      "wisataSlug": "kota-yogyakarta",
+      "aliases": [
+        "kota jogja",
+        "kota yogya",
+        "yogyakarta city",
+        "kota yogyakarta"
+      ],
+      "administrativeType": "city"
+    },
+    {
+      "conceptId": "diy:kabupaten-sleman",
+      "hotelLabel": "Sleman",
+      "wisataSlug": "kabupaten-sleman",
+      "aliases": [
+        "kabupaten sleman",
+        "kab sleman",
+        "kab. sleman",
+        "sleman"
+      ],
+      "administrativeType": "regency"
+    },
+    {
+      "conceptId": "diy:kabupaten-bantul",
+      "hotelLabel": "Bantul",
+      "wisataSlug": "kabupaten-bantul",
+      "aliases": [
+        "kabupaten bantul",
+        "kab bantul",
+        "kab. bantul",
+        "bantul"
+      ],
+      "administrativeType": "regency"
+    },
+    {
+      "conceptId": "diy:kabupaten-gunungkidul",
+      "hotelLabel": "Gunungkidul",
+      "wisataSlug": "kabupaten-gunungkidul",
+      "aliases": [
+        "kabupaten gunung kidul",
+        "kabupaten gunungkidul",
+        "gunung kidul",
+        "gunungkidul",
+        "kab. gunung kidul"
+      ],
+      "administrativeType": "regency"
+    },
+    {
+      "conceptId": "diy:kabupaten-kulon-progo",
+      "hotelLabel": "Kulon Progo",
+      "wisataSlug": "kabupaten-kulon-progo",
+      "aliases": [
+        "kabupaten kulon progo",
+        "kabupaten kulonprogo",
+        "kulonprogo",
+        "kulon progo",
+        "kab. kulon progo"
+      ],
+      "administrativeType": "regency"
+    }
+  ],
+  "fieldConcepts": [
+    {
+      "conceptId": "common:administrative-region",
+      "hotel": [
+        "city"
+      ],
+      "wisata": [
+        "region"
+      ],
+      "relation": "exactConcept",
+      "notes": "Representasi string berbeda; rujuk conceptId wilayah."
+    },
+    {
+      "conceptId": "common:resource-title",
+      "hotel": [
+        "name"
+      ],
+      "wisata": [
+        "name"
+      ],
+      "relation": "relatedType",
+      "notes": "Nama objek akomodasi berbeda dari nama destinasi, jangan campur ID."
+    },
+    {
+      "conceptId": "common:resource-description",
+      "hotel": [
+        "description"
+      ],
+      "wisata": [
+        "description"
+      ],
+      "relation": "sameProperty"
+    },
+    {
+      "conceptId": "common:photo-of-resource",
+      "hotel": [
+        "imageUrl",
+        "image_url"
+      ],
+      "wisata": [
+        "photos"
+      ],
+      "relation": "sameProperty",
+      "notes": "Photos berupa array path relatif dan harus diselesaikan dengan URL asal Wisata."
+    },
+    {
+      "conceptId": "common:booking-reference",
+      "hotel": [
+        "bookingId"
+      ],
+      "wisata": [
+        "code"
+      ],
+      "relation": "sameRole",
+      "notes": "ID berbeda namespace dan tidak boleh disamakan nilainya."
+    },
+    {
+      "conceptId": "common:client-name",
+      "hotel": [
+        "guestName"
+      ],
+      "wisata": [
+        "name",
+        "customer.name"
+      ],
+      "relation": "sameRole"
+    },
+    {
+      "conceptId": "common:client-email",
+      "hotel": [
+        "guestEmail"
+      ],
+      "wisata": [
+        "email",
+        "customer.email"
+      ],
+      "relation": "sameRole"
+    },
+    {
+      "conceptId": "common:client-phone",
+      "hotel": [
+        "guestPhone"
+      ],
+      "wisata": [
+        "phone",
+        "customer.phone"
+      ],
+      "relation": "sameRole"
+    },
+    {
+      "conceptId": "common:number-of-users",
+      "hotel": [
+        "guests"
+      ],
+      "wisata": [
+        "qty"
+      ],
+      "relation": "relatedMatch",
+      "notes": "Orang yang menginap vs tiket; unit dan aturan bisnis tidak identik."
+    },
+    {
+      "conceptId": "common:service-start",
+      "hotel": [
+        "checkIn"
+      ],
+      "wisata": [
+        "visit_date"
+      ],
+      "relation": "relatedMatch",
+      "notes": "Check-in hotel vs tanggal kunjungan wisata tidak boleh disalin otomatis."
+    },
+    {
+      "conceptId": "common:service-end",
+      "hotel": [
+        "checkOut"
+      ],
+      "wisata": [],
+      "relation": "hotelOnly"
+    },
+    {
+      "conceptId": "common:unit-price",
+      "hotel": [
+        "pricePerNight"
+      ],
+      "wisata": [
+        "price",
+        "unit_price"
+      ],
+      "relation": "relatedMatch",
+      "notes": "Harga PER MALAM vs PER TIKET, gunakan unit eksplisit."
+    },
+    {
+      "conceptId": "common:total-amount",
+      "hotel": [
+        "totalPrice"
+      ],
+      "wisata": [
+        "total"
+      ],
+      "relation": "sameRole",
+      "notes": "Keduanya IDR, tetapi total berasal dari perhitungan berbeda."
+    },
+    {
+      "conceptId": "common:service-availability",
+      "hotel": [
+        "unitsAvailable"
+      ],
+      "wisata": [
+        "available",
+        "remaining"
+      ],
+      "relation": "relatedMatch",
+      "notes": "Stok kamar per malam vs kuota tiket per tanggal."
+    },
+    {
+      "conceptId": "common:reservation-state",
+      "hotel": [
+        "status"
+      ],
+      "wisata": [
+        "status"
+      ],
+      "relation": "relatedMatch",
+      "notes": "Hotel confirmed bukan sinonim Wisata PAID; lifecycle dan payment harus dipisah."
+    },
+    {
+      "conceptId": "common:currency",
+      "hotel": [
+        "IDR",
+        "Rp",
+        "rupiah"
+      ],
+      "wisata": [
+        "IDR",
+        "Rp",
+        "rupiah"
+      ],
+      "relation": "exactConcept"
+    },
+    {
+      "conceptId": "common:source-system",
+      "hotel": [
+        "source"
+      ],
+      "wisata": [
+        "source"
+      ],
+      "relation": "sameProperty"
+    },
+    {
+      "conceptId": "common:refund-amount",
+      "hotel": [
+        "payment.refundAmount",
+        "refund.amount"
+      ],
+      "wisata": [
+        "refund_amount"
+      ],
+      "relation": "sameRole",
+      "notes": "Nilai pengembalian dana, bukan persentase refund."
+    },
+    {
+      "conceptId": "common:booking-created-at",
+      "hotel": [
+        "createdAt"
+      ],
+      "wisata": [
+        "created_at"
+      ],
+      "relation": "sameRole",
+      "notes": "Hati-hati timezone: Hotel biasanya UTC, Wisata dapat waktu lokal tanpa offset."
+    },
+    {
+      "conceptId": "common:error-code",
+      "hotel": [
+        "code"
+      ],
+      "wisata": [
+        "code"
+      ],
+      "relation": "sameProperty",
+      "notes": "Kode error dapat berbeda nilainya meskipun kategori HTTP sama."
+    },
+    {
+      "conceptId": "common:error-message",
+      "hotel": [
+        "message"
+      ],
+      "wisata": [
+        "error"
+      ],
+      "relation": "sameProperty",
+      "notes": "Hotel error bernilai boolean dan message berisi teks; Wisata error berisi teks."
+    }
+  ],
+  "statusMappings": {
+    "hotelBooking": {
+      "confirmed": "reserved",
+      "checked_in": "in_progress",
+      "checked_out": "completed",
+      "cancelled": "cancelled"
+    },
+    "hotelPayment": {
+      "unpaid": "unpaid",
+      "paid": "paid",
+      "refunded": "refunded",
+      "partially_refunded": "partially_refunded"
+    },
+    "wisataBooking": {
+      "PENDING": "awaiting_payment",
+      "PAID": "reserved",
+      "REFUNDED": "refunded",
+      "EXPIRED": "expired"
+    },
+    "wisataPayment": {
+      "PENDING": "unpaid",
+      "PAID": "paid",
+      "REFUNDED": "refunded",
+      "EXPIRED": "expired"
+    }
+  },
+  "nonEquivalences": [
+    "city=Kota Yogyakarta tidak sama dengan Provinsi DIY",
+    "hotelId tidak sama dengan destination_id walaupun nilainya sama",
+    "checkIn tidak sama dengan visit_date",
+    "guests tidak selalu sama dengan qty",
+    "pricePerNight tidak sama dengan unit_price tiket",
+    "confirmed tidak sama dengan paid",
+    "hotel cancelled tidak sama dengan wisata refunded"
+  ]
+}

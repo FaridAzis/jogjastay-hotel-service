@@ -1,0 +1,54 @@
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix ex: <https://example.org/itinerary-diy/semantics/> .
+@prefix schema: <https://schema.org/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# SKOS: kosakata terkontrol, BUKAN penyatuan database atau ontologi OWL reasoning otomatis.
+ex:DIYRegions a skos:ConceptScheme ; skos:prefLabel "Lima wilayah administratif DIY"@id .
+
+ex:kota_yogyakarta a skos:Concept, schema:AdministrativeArea ;
+  skos:inScheme ex:DIYRegions ;
+  skos:prefLabel "Kota Yogyakarta"@id ;
+  skos:altLabel "kota-yogyakarta"@id, "kota jogja"@id, "kota yogya"@id, "yogyakarta city"@id, "kota yogyakarta"@id ;
+  ex:hotelLabel "Kota Yogyakarta" ;
+  ex:wisataSlug "kota-yogyakarta" ;
+  ex:administrativeType "city" .
+
+ex:kabupaten_sleman a skos:Concept, schema:AdministrativeArea ;
+  skos:inScheme ex:DIYRegions ;
+  skos:prefLabel "Sleman"@id ;
+  skos:altLabel "kabupaten-sleman"@id, "kabupaten sleman"@id, "kab sleman"@id, "kab. sleman"@id, "sleman"@id ;
+  ex:hotelLabel "Sleman" ;
+  ex:wisataSlug "kabupaten-sleman" ;
+  ex:administrativeType "regency" .
+
+ex:kabupaten_bantul a skos:Concept, schema:AdministrativeArea ;
+  skos:inScheme ex:DIYRegions ;
+  skos:prefLabel "Bantul"@id ;
+  skos:altLabel "kabupaten-bantul"@id, "kabupaten bantul"@id, "kab bantul"@id, "kab. bantul"@id, "bantul"@id ;
+  ex:hotelLabel "Bantul" ;
+  ex:wisataSlug "kabupaten-bantul" ;
+  ex:administrativeType "regency" .
+
+ex:kabupaten_gunungkidul a skos:Concept, schema:AdministrativeArea ;
+  skos:inScheme ex:DIYRegions ;
+  skos:prefLabel "Gunungkidul"@id ;
+  skos:altLabel "kabupaten-gunungkidul"@id, "kabupaten gunung kidul"@id, "kabupaten gunungkidul"@id, "gunung kidul"@id, "gunungkidul"@id, "kab. gunung kidul"@id ;
+  ex:hotelLabel "Gunungkidul" ;
+  ex:wisataSlug "kabupaten-gunungkidul" ;
+  ex:administrativeType "regency" .
+
+ex:kabupaten_kulon_progo a skos:Concept, schema:AdministrativeArea ;
+  skos:inScheme ex:DIYRegions ;
+  skos:prefLabel "Kulon Progo"@id ;
+  skos:altLabel "kabupaten-kulon-progo"@id, "kabupaten kulon progo"@id, "kabupaten kulonprogo"@id, "kulonprogo"@id, "kulon progo"@id, "kab. kulon progo"@id ;
+  ex:hotelLabel "Kulon Progo" ;
+  ex:wisataSlug "kabupaten-kulon-progo" ;
+  ex:administrativeType "regency" .
+
+# Properti yang terkait tetapi bukan identik secara semantik.
+ex:pricePerNight skos:related ex:ticketUnitPrice .
+ex:hotelCheckIn skos:related ex:touristVisitDate .
+ex:hotelGuestCount skos:related ex:ticketQuantity .
+ex:hotelReservationStatus skos:related ex:touristTicketStatus .

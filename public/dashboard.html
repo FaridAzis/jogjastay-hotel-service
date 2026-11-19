@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dashboard · JogjaStay</title>
+  <link rel="icon" href="/img/logo.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/staff/staff.css">
+</head>
+<body class="app">
+  <aside class="sidebar" id="sidebar">
+    <a href="#overview" class="brand"><img src="/img/logo.svg" alt="" width="32" height="32"><span>JogjaStay</span><small>Staf</small></a>
+    <nav class="side-nav" id="sideNav">
+      <a href="#overview" data-view="overview"><i data-icon="home"></i>Ringkasan</a>
+      <a href="#bookings" data-view="bookings"><i data-icon="calendar"></i>Reservasi</a>
+      <a href="#rooms" data-view="rooms"><i data-icon="bed"></i>Kamar &amp; Hotel</a>
+      <a href="#staff" data-view="staff" data-admin><i data-icon="users"></i>Akun Staf</a>
+      <a href="#integrations" data-view="integrations" data-admin><i data-icon="plug"></i>Integrasi API</a>
+      <a href="#activity" data-view="activity"><i data-icon="list"></i>Log Aktivitas</a>
+    </nav>
+    <div class="side-links">
+      <a href="/" target="_blank" rel="noopener">Website tamu ↗</a>
+      <a href="/api/docs" target="_blank" rel="noopener">Swagger API ↗</a>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <button class="icon-btn menu-btn" id="menuBtn" aria-label="Menu"><i data-icon="menu"></i></button>
+      <h1 id="viewTitle">Ringkasan</h1>
+      <div class="user">
+        <div class="avatar" id="avatar"></div>
+        <div class="user-meta"><b id="userName"></b><small id="userRole"></small></div>
+        <button class="btn btn-light btn-sm" id="logoutBtn">Keluar</button>
+      </div>
+    </header>
+    <section class="content" id="content"><div class="loading">Memuat…</div></section>
+  </div>
+
+  <div class="drawer" id="drawer" hidden>
+    <div class="drawer-backdrop" data-close></div>
+    <div class="drawer-panel" id="drawerPanel"></div>
+  </div>
+  <div class="modal" id="modal" hidden>
+    <div class="modal-backdrop" data-close></div>
+    <div class="modal-panel" id="modalPanel"></div>
+  </div>
+  <div class="toast" id="toast" hidden></div>
+
+  <script src="/staff/dashboard.js"></script>
+</body>
+</html>

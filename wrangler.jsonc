@@ -1,0 +1,23 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "jogjastay-hotel-service",
+  "main": "src/worker.mjs",
+  "compatibility_date": "2026-11-19",
+  "workers_dev": true,
+  "assets": {
+    "directory": "./public",
+    "binding": "ASSETS",
+    "run_worker_first": true
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "jogjastay-db",
+      "database_id": "f125d151-21c3-4867-a0b8-bb3b01f90095"
+    }
+  ],
+  "vars": {
+    "WISATA_DESTINATIONS_PATH": "/api/v1/destinations",
+    "WISATA_API_BASE_URL": "https://wisata-jogja-ten.vercel.app"
+  }
+}

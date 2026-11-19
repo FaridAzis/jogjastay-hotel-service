@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>API Docs · Hotel Service</title>
+  <link rel="icon" href="/img/logo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/api/docs/assets/swagger-ui.css">
+  <style>
+    body { margin: 0; background: #fafaf7; font-family: system-ui, sans-serif; }
+    .bar { background: #0f4c43; color: #fff; padding: 14px 24px; display: flex; gap: 16px; align-items: center; }
+    .bar a { color: #fff; opacity: .85; text-decoration: none; font-size: 14px; }
+    .bar b { font-size: 17px; margin-right: auto; }
+    .swagger-ui .topbar { display: none; }
+    .fallback { max-width: 760px; margin: 40px auto; padding: 0 20px; }
+  </style>
+</head>
+<body>
+  <div class="bar"><b>Hotel Service · API v1</b><a href="/api/openapi.json">openapi.json</a><a href="/">Website</a><a href="/dashboard">Dashboard</a></div>
+  <div id="swagger"></div>
+  <script src="/api/docs/assets/swagger-ui-bundle.js"></script>
+  <script>
+    if (window.SwaggerUIBundle) {
+      SwaggerUIBundle({ url: '/api/openapi.json', dom_id: '#swagger', deepLinking: true, persistAuthorization: true, docExpansion: 'list' });
+    } else {
+      document.getElementById('swagger').innerHTML =
+        '<div class="fallback"><h2>Swagger UI tidak bisa dimuat</h2><p>Jalankan npm install agar paket swagger-ui-dist tersedia. ' +
+        'Kontrak API tetap tersedia di <a href="/api/openapi.json">/api/openapi.json</a> dan bisa diimpor ke Postman.</p></div>';
+    }
+  </script>
+</body>
+</html>
