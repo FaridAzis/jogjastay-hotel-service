@@ -1,31 +1,78 @@
-# Kontrak untuk tim Itinerary Yogyakarta (draft yang dapat disepakati bersama)
+# Kontrak API Hotel untuk Tim Itinerary
 
-URL base berasal dari URL Worker Hotel Service setelah deployment: `https://....workers.dev/api/v1`.
+Dokumen ini dipakai tim Itinerary untuk menghubungkan backend mereka dengan JogjaStay. URL API tetap sama walaupun source Hotel diperbaiki dan di-deploy ulang.
 
-## Hotel
+**Base URL Hotel:** https://jogjastay-hotel-service.jogjawisata.workers.dev  
+**Prefix API:** `/api/v1`  
+**Dokumentasi API:** https://jogjastay-hotel-service.jogjawisata.workers.dev/api/docs
 
-- `GET /regions` -> array `{name,hotelCount}`.
-- `GET /hotels?city=Sleman` -> array `{hotelId,name,city,rating,area,description,imageUrl,address}`.
-- `GET /rooms?checkIn=YYYY-MM-DD&checkOut=YYYY-MM-DD&city=Bantul` -> array kamar dengan `pricePerNight`, `unitsAvailable`, `totalPrice`.
-- `POST /hotel-bookings`: JSON `{hotelId,roomId,guestName,guestEmail?,guestPhone?,guests,checkIn,checkOut}`; wajib via server aggregator dengan `Authorization: Bearer <token>` + `Idempotency-Key`.
-- Response `201` `{bookingId,status,totalPrice}`; jika tamu langsung via website response juga mencakup `accessToken` privat.
-- `GET /hotel-bookings/:id` untuk partner sah, `POST /hotel-bookings/:id/pay` (simulasi), `DELETE /hotel-bookings/:id` (pembatalan demo).
-- `GET /partner/bookings` hanya mengembalikan reservasi milik token partner tersebut.
+## Katalog dan pengecekan kamar
 
-## Komunikasi Hotel -> Wisata
+Endpoint publik yang dapat dipanggil tanpa token partner:
 
-- Hotel Worker memanggil `WISATA_API_BASE_URL` + `WISATA_DESTINATIONS_PATH` dengan filter `city` dan memvalidasi/filter hasil terhadap wilayah hotel.
-- Respons Wisata dapat berupa array langsung atau objek dengan properti `data`, `destinations`, `wisata`, atau `results`; setiap item minimal `id`, `name`, `city` (bisa alias `kabupaten`/`wilayah`).
-- Jika API Wisata tidak siap, Hotel Worker mengembalikan HTTP 503/502; **jangan mengklaim komunikasi berhasil sebelum uji lintas-service**.
+- `GET /api/v1/regions` — daftar lima wilayah DIY.
+- `GET /api/v1/hotels` — daftar hotel. Filter wilayah dapat memakai `city=Sleman` atau slug `city=kabupaten-sleman`.
+- `GET /api/v1/hotels/{id}` — detail hotel dan tipe kamar.
+- `GET /api/v1/rooms?city=Bantul&checkIn=YYYY-MM-DD&checkOut=YYYY-MM-DD` — daftar kamar dengan ketersediaan dan harga untuk periode yang dipilih.
+- `GET /api/v1/hotels/{id}/availability?checkIn=YYYY-MM-DD&checkOut=YYYY-MM-DD` — ketersediaan kamar hotel tertentu.
 
-## Kriteria demonstrasi untuk Prof. Selo dan Prof. Lukito
+Contoh permintaan:
 
-1. Website hotel berfungsi independen saat Itinerary dimatikan.
-2. Rekomendasi Hotel–Wisata merupakan request API langsung (bukan link atau data manual).
-3. Itinerary berhasil meminta hotel dan membuat reservasi melalui API.
-4. Status booking terlihat di admin Hotel, dan gagal/sukses tiap subsistem ditampilkan terpisah dalam paket bundling.
+```text
+GET https://jogjastay-hotel-service.jogjawisata.workers.dev/api/v1/hotels?city=Sleman
+```
 
+## Reservasi melalui backend Itinerary
 
-## Pembaruan semantik (19 November 2026)
+Operasi partner dilakukan dari **server Itinerary**, bukan JavaScript browser.
 
-Kontrak aktual tim Wisata: `GET /api/v1/destinations?region=kabupaten-sleman`. Hotel mengubah `city=Sleman` menjadi slug Wisata melalui kamus SKOS/RDF `ontology/diy-semantic.ttl`; Wisata dapat mengubah `region=kabupaten-sleman` menjadi query Hotel `city=Sleman`. Lihat `SEMANTIK_HOTEL_WISATA.md`. Filter saat ini adalah cakupan administratif, bukan jarak geospasial.
+- `POST /api/v1/hotel-bookings` — membuat reservasi. Data yang diperlukan: `hotelId`, `roomId`, `guestName`, `guests`, `checkIn`, dan `checkOut`; kontak tamu mengikuti validasi API.
+- `GET /api/v1/partner/bookings` — membaca reservasi milik partner yang sedang terautentikasi.
+- `GET /api/v1/hotel-bookings/{id}` — membaca reservasi sesuai izin akses.
+- `POST /api/v1/hotel-bookings/{id}/pay` — mencatat status pembayaran pada data tugas kuliah.
+- `DELETE /api/v1/hotel-bookings/{id}` — pembatalan sesuai aturan yang berlaku.
+
+Contoh header operasi partner:
+
+```http
+Authorization: Bearer TOKEN_PARTNER_HOTEL
+Idempotency-Key: KEY_UNIK_PER_PERMINTAAN_RESERVASI
+Content-Type: application/json
+```
+
+Token partner Hotel sudah disampaikan kepada tim Itinerary secara privat. **Jangan menaruh token asli di GitHub, halaman browser, atau dokumentasi.** Pengiriman token saja belum membuktikan bahwa reservasi dari Itinerary telah berhasil; tetap perlu tes end-to-end.
+
+## Integrasi langsung Hotel dan Wisata
+
+Hotel memanggil API Wisata di:
+
+```text
+https://wisata-jogja-ten.vercel.app/api/v1/destinations?region=kabupaten-sleman
+```
+
+Contoh respons yang sudah dipetakan ke format JogjaStay dapat dilihat melalui:
+
+```text
+GET https://jogjastay-hotel-service.jogjawisata.workers.dev/api/v1/hotels/H11/recommendations
+```
+
+Pemetaan `Sleman` ↔ `kabupaten-sleman` juga berlaku untuk empat wilayah DIY lainnya. Integrasi **Hotel → Wisata** sudah lolos pengecekan API lima wilayah.
+
+Arah **Wisata → Hotel** merupakan pekerjaan tim Wisata. Mereka perlu memanggil API Hotel dari backend Wisata dan menampilkan hasilnya pada aplikasi mereka.
+
+**Itinerary tidak menjadi perantara komunikasi Hotel ↔ Wisata.** Itinerary menggunakan API kedua layanan untuk menyusun bundling perjalanan.
+
+## Bukti yang masih dibutuhkan untuk laporan
+
+1. Pengujian dari aplikasi Itinerary yang berhasil membaca data Hotel dan membuat reservasi menggunakan token partner.
+2. Bukti reservasi tersebut muncul pada dashboard Hotel dengan sumber partner yang benar.
+3. Hasil tampilan aplikasi Wisata yang sudah mengambil rekomendasi Hotel secara langsung.
+4. Pengujian kondisi gagal, seperti token tidak valid, stok kamar habis, atau layanan mitra tidak tersedia.
+
+Status tersebut belum boleh ditulis sebagai sudah selesai sebelum dibuktikan dari deployment masing-masing.
+
+## Catatan penggunaan
+
+- Harga dan pembayaran reservasi Hotel digunakan untuk demonstrasi akademik, bukan transaksi uang asli.
+- `GET` katalog publik tidak membutuhkan token. `POST` reservasi partner membutuhkannya.
+- Format respons rinci dan kode kesalahan mengikuti API yang berjalan. Jangan menyimpulkan keberhasilan hanya dari status HTTP bila respons menunjukkan kegagalan.
